@@ -1,32 +1,32 @@
 {
-  "version": "0.10.0",
-  "description": "Native high-performance workspace navigator for PowerShell 7 on Windows.",
-  "homepage": "https://github.com/JacobOptimiza/dev-nav",
-  "license": "MIT",
-  "psmodule": {
-    "name": "DevNav"
-  },
-  "checkver": {
-    "github": "https://github.com/JacobOptimiza/dev-nav"
-  },
-  "autoupdate": {
-    "architecture": {
-      "64bit": {
-        "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v$version/DevNav-scoop-x64.zip"
-      },
-      "arm64": {
-        "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v$version/DevNav-scoop-arm64.zip"
-      }
-    }
-  },
-  "architecture": {
-    "64bit": {
-      "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v0.10.0/DevNav-scoop-x64.zip",
-      "hash": "00aebe015f649dc52f97d88c5b2da85fc74db73d93f884076e827eb4b62a87f7"
+    "version": "0.10.0",
+    "description": "Native high-performance workspace navigator for PowerShell 7 on Windows.",
+    "homepage": "https://github.com/JacobOptimiza/dev-nav",
+    "license": "MIT",
+    "psmodule": {
+        "name": "DevNav"
     },
-    "arm64": {
-      "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v0.10.0/DevNav-scoop-arm64.zip",
-      "hash": "952c186165e57d955c4d0ed7a7d07e7f2c44896daab2a7aedba90683db29c189"
+    "checkver": {
+        "github": "https://github.com/JacobOptimiza/dev-nav"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v$version/DevNav-scoop-x64.zip"
+            },
+            "arm64": {
+                "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v$version/DevNav-scoop-arm64.zip"
+            }
+        }
+    },
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v0.10.0/DevNav-scoop-x64.zip",
+            "hash": "00aebe015f649dc52f97d88c5b2da85fc74db73d93f884076e827eb4b62a87f7"
+        },
+        "arm64": {
+            "url": "https://github.com/JacobOptimiza/dev-nav/releases/download/v0.10.0/DevNav-scoop-arm64.zip",
+            "hash": "952c186165e57d955c4d0ed7a7d07e7f2c44896daab2a7aedba90683db29c189"
+        }
     }
-  }
 }
