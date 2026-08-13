@@ -28,11 +28,14 @@ jobs:
           # Need at least 2 commits to properly gather changed files for linting
           fetch-depth: 2
           path: 'my_bucket'
+          persist-credentials: false
       - name: Checkout Scoop
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: ScoopInstaller/Scoop
+          ref: b588a06e41d920d2123ec70aee682bae14935939 # Scoop 0.5.3
           path: 'scoop_core'
+          persist-credentials: false
       - name: Install and cache test dependencies
         uses: potatoqualitee/psmodulecache@ee5e9494714abf56f6efbfa51527b2aec5c761b8 # v6.2.1
         with:
