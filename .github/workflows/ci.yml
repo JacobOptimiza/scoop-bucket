@@ -23,24 +23,36 @@ jobs:
         shell: ${{ matrix.shell }}
     steps:
       - name: Checkout Bucket
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Need at least 2 commits to properly gather changed files for linting
           fetch-depth: 2
           path: 'my_bucket'
           persist-credentials: false
       - name: Checkout Scoop
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ScoopInstaller/Scoop
           ref: b588a06e41d920d2123ec70aee682bae14935939 # Scoop 0.5.3
           path: 'scoop_core'
           persist-credentials: false
-      - name: Install and cache test dependencies
-        uses: potatoqualitee/psmodulecache@ee5e9494714abf56f6efbfa51527b2aec5c761b8 # v6.2.1
+      - name: Configure deterministic PowerShell module path
+        run: |
+          $moduleRoot = Join-Path $env:RUNNER_TEMP 'scoop-test-modules'
+          New-Item -ItemType Directory -Path $moduleRoot -Force | Out-Null
+          "PSModuleRoot=$moduleRoot" >> $env:GITHUB_ENV
+          "PSModulePath=$moduleRoot$([IO.Path]::PathSeparator)$env:PSModulePath" >> $env:GITHUB_ENV
+      - name: Cache test dependencies
+        id: module-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          modules-to-cache: BuildHelpers, Pester
-          shell: ${{ matrix.shell }}
+          path: ${{ runner.temp }}/scoop-test-modules
+          key: ${{ runner.os }}-${{ matrix.shell }}-powershell-modules-buildhelpers-2.0.16-pester-6.1.0
+      - name: Install pinned test dependencies on cache miss
+        if: steps.module-cache.outputs.cache-hit != 'true'
+        run: |
+          Save-Module -Name BuildHelpers -RequiredVersion 2.0.16 -Repository PSGallery -Path $env:PSModuleRoot -Force
+          Save-Module -Name Pester -RequiredVersion 6.1.0 -Repository PSGallery -Path $env:PSModuleRoot -Force
       - name: Run tests
         run: |
           $env:SCOOP_HOME="$(Convert-Path '.\scoop_core')"
