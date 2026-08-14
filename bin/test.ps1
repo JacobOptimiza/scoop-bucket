@@ -15,7 +15,6 @@ $pesterConfig = New-PesterConfiguration -Hashtable @{
 $result = Invoke-Pester -Configuration $pesterConfig
 $failureCount = [int]$result.FailedCount + [int]$result.FailedContainersCount + [int]$result.FailedBlocksCount
 if ($failureCount -gt 0) {
-    Write-Error "Pester reported $failureCount failure(s), including container/discovery failures."
-    exit 1
+    throw "Pester reported $failureCount failure(s), including container/discovery failures."
 }
 exit 0
