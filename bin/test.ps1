@@ -4,12 +4,18 @@
 
 $pesterConfig = New-PesterConfiguration -Hashtable @{
     Run    = @{
-        Path     = "$PSScriptRoot/.."
-        PassThru = $true
+        Path                           = "$PSScriptRoot/.."
+        PassThru                       = $true
+        FailOnNullOrEmptyForEach       = $false
     }
     Output = @{
         Verbosity = 'Detailed'
     }
 }
 $result = Invoke-Pester -Configuration $pesterConfig
-exit $result.FailedCount
+$failureCount = [int]$result.FailedCount + [int]$result.FailedContainersCount + [int]$result.FailedBlocksCount
+if ($failureCount -gt 0) {
+    Write-Error "Pester reported $failureCount failure(s), including container/discovery failures."
+    exit 1
+}
+exit 0

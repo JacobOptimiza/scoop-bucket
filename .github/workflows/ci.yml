@@ -36,12 +36,25 @@ jobs:
           ref: b588a06e41d920d2123ec70aee682bae14935939 # Scoop 0.5.3
           path: 'scoop_core'
           persist-credentials: false
-      - name: Install and cache test dependencies
-        # v6.3 is the latest stable wrapper; it currently embeds actions/cache v5.
-        uses: potatoqualitee/psmodulecache@9e4b63833c22c1768d648e115a9c849afdda22a5 # v6.3
+      - name: Configure deterministic PowerShell module path
+        shell: ${{ matrix.shell }}
+        run: |
+          $moduleRoot = Join-Path $env:RUNNER_TEMP 'scoop-test-modules'
+          New-Item -ItemType Directory -Path $moduleRoot -Force | Out-Null
+          "PSModuleRoot=$moduleRoot" >> $env:GITHUB_ENV
+          "PSModulePath=$moduleRoot$([IO.Path]::PathSeparator)$env:PSModulePath" >> $env:GITHUB_ENV
+      - name: Cache test dependencies
+        id: module-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          modules-to-cache: BuildHelpers, Pester
-          shell: ${{ matrix.shell }}
+          path: ${{ runner.temp }}/scoop-test-modules
+          key: ${{ runner.os }}-${{ matrix.shell }}-powershell-modules-buildhelpers-2.0.16-pester-6.1.0
+      - name: Install pinned test dependencies on cache miss
+        if: steps.module-cache.outputs.cache-hit != 'true'
+        shell: ${{ matrix.shell }}
+        run: |
+          Save-Module -Name BuildHelpers -RequiredVersion 2.0.16 -Repository PSGallery -Path $env:PSModuleRoot -Force
+          Save-Module -Name Pester -RequiredVersion 6.1.0 -Repository PSGallery -Path $env:PSModuleRoot -Force
       - name: Run tests
         run: |
           $env:SCOOP_HOME="$(Convert-Path '.\scoop_core')"
