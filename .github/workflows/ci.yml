@@ -37,7 +37,6 @@ jobs:
           path: 'scoop_core'
           persist-credentials: false
       - name: Configure deterministic PowerShell module path
-        shell: ${{ matrix.shell }}
         run: |
           $moduleRoot = Join-Path $env:RUNNER_TEMP 'scoop-test-modules'
           New-Item -ItemType Directory -Path $moduleRoot -Force | Out-Null
@@ -51,7 +50,6 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.shell }}-powershell-modules-buildhelpers-2.0.16-pester-6.1.0
       - name: Install pinned test dependencies on cache miss
         if: steps.module-cache.outputs.cache-hit != 'true'
-        shell: ${{ matrix.shell }}
         run: |
           Save-Module -Name BuildHelpers -RequiredVersion 2.0.16 -Repository PSGallery -Path $env:PSModuleRoot -Force
           Save-Module -Name Pester -RequiredVersion 6.1.0 -Repository PSGallery -Path $env:PSModuleRoot -Force
