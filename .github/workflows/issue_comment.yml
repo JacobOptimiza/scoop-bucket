@@ -18,7 +18,7 @@ jobs:
         with:
           persist-credentials: false
       - name: PullRequestHandler
-        uses: ScoopInstaller/GithubActions@a709983c0692a8a853c288cf5e9bf14658107936 # pinned upstream commit
+        uses: ScoopInstaller/GithubActions@8720dc58b31abbfe1f0b9c21f5fff6ba6dd96dd3 # pinned upstream commit
         if: startsWith(github.event.comment.body, '/verify')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
